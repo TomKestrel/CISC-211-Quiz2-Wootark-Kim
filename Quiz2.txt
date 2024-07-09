@@ -1,0 +1,44 @@
+; Quiz#2
+; by Wootark Kim
+
+;Quiz task: Code so that x = (a x b) + (c x d)
+
+;Note #1: "a" will arbitrarily be assigned 2
+;Note #2: "b" will arbitrarily be assigned 3
+;Note #3: "c" will arbitrarily be assigned 4
+;Note #4: "d" will arbitrarily be assigned 5
+;Note #5: result "x" should turn out to be 26
+;Note #6: correct result confirmed with gdb! Use "watch (int) x" instead of "watch (int) result"
+
+; the section where my code that will be read begins
+section .text
+	global _start
+
+_start:
+	mov eax, [a]		;load register eax with the value of "a"
+	mov ebx, [b]		;load register ebx with the value of "b"
+	mov ecx, [c]		;load register ecx with the value of "c"
+	mov edx, [d]		;load register edx with the value of "d"
+	
+	imul eax, ebx		;perform multiplication (a x b)
+	xor ebx, ebx		;clear ebx register since ebx already served its purpose (good coding practice)
+	imul ecx, edx		;perform multiplication (c x d)
+	xor edx, edx		;clear edx register since edx already served its purpose (good coding practice)
+	add eax, ecx		;perform addition of (a x b) with (c x d)
+	xor ecx, ecx		;clear ecx register since ecx already served its purpose (good coding practice)
+
+
+	mov [x], eax	;load the uninitialized variable "x" result with the answer
+
+	; instructions for shutting down
+	mov eax, 1		;shutdown call
+	int 0x80		;make the system call
+
+section .bss
+	x resb 1		;unintialized variable called x
+
+section .data
+	a dd 2		;I will initialize a with an arbitrary value of 2
+	b dd 3		;I will initialize b with an arbitrary value of 3
+	c dd 4		;I will initialize c with an arbitrary value of 4
+	d dd 5		;I will initialize d with an arbitrary value of 5
